@@ -9,6 +9,9 @@ from werkzeug.wrappers import Response
 
 from data_models import db, Author, Book
 
+# Case-insensitive sort expressions for the home page, keyed by the "sort" query parameter.
+SORT_COLUMNS = {"title": db.func.lower(Book.title), "author": db.func.lower(Author.name)}
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
 
@@ -113,6 +116,10 @@ def add_book() -> str | Response:
 
 @app.route("/")
 def home() -> str:
-    """Show all books with their author and cover image."""
-    books = db.session.execute(db.select(Book)).scalars().all()
-    return render_template("home.html", books=books)
+    """Show all books with their author and cover image, sorted by title or author."""
+    sort = request.args.get("sort", "title")
+    if sort not in SORT_COLUMNS:
+        sort = "title"
+    query = db.select(Book).join(Book.author).order_by(SORT_COLUMNS[sort], SORT_COLUMNS["title"])
+    books = db.session.execute(query).scalars().all()
+    return render_template("home.html", books=books, sort=sort)

@@ -9,6 +9,12 @@
   <body>
   {% include "nav.html" %}
 
+    <p>
+      Sort by:
+      <a href="{{ url_for('home', sort='title') }}"{% if sort == 'title' %} aria-current="true"{% endif %}>Title</a> |
+      <a href="{{ url_for('home', sort='author') }}"{% if sort == 'author' %} aria-current="true"{% endif %}>Author</a>
+    </p>
+
     {% for book in books %}
     <div>
       <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn | urlencode }}-M.jpg"
