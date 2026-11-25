@@ -14,6 +14,8 @@
   --accent-bg: #e6f0fb;
   --warning: #b35900;
   --warning-bg: #fdf0e3;
+  --star: #b07800;
+  --star-empty: #8a929b;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -28,6 +30,8 @@
     --accent-bg: #16283d;
     --warning: #f5a453;
     --warning-bg: #3a2614;
+    --star: #f2c14e;
+    --star-empty: #5a616b;
   }
 }
 
@@ -124,3 +128,30 @@ dt { font-weight: 600; }
 dd { margin: 0; overflow-wrap: anywhere; }
 
 .recommendation { max-width: 40rem; white-space: pre-line; }
+
+/* Stars: a 1-10 rating shown as 0.5 to 5 stars. The filled row is clipped to rating x 10 %. */
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.stars { position: relative; display: inline-flex; vertical-align: -0.2em; color: var(--star-empty); }
+.stars > span { display: flex; }
+.stars svg { flex-shrink: 0; width: 1.2em; height: 1.2em; fill: currentColor; }
+.stars-full { position: absolute; inset: 0; overflow: hidden; width: calc(var(--rating) * 10%); color: var(--star); }
+
+/* Star input: ten submit buttons, each shows the left or right half of a star. */
+.star-input { margin: 1rem 0; padding: 0; border: 0; }
+.star-input legend { padding: 0; font-weight: 600; }
+.star-row { display: flex; }
+.star-row button {
+  width: 1.5rem;
+  height: 3rem;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--star-empty);
+}
+.star-row svg { display: block; width: 3rem; height: 3rem; fill: currentColor; }
+.star-row .half-right svg { margin-left: -1.5rem; }
+.star-row .filled, .star-row:hover button { color: var(--star); }
+.star-row button:hover ~ button { color: var(--star-empty); }

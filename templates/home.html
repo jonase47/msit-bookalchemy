@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "macros.html" import star_rating %}
 
 {% block title %}Book Alchemy{% endblock %}
 
@@ -25,7 +26,7 @@
            alt="Cover of {{ book.title }}" width="120" height="180">
       <h3><a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a></h3>
       <p>by <a href="{{ url_for('author_detail', author_id=book.author.id) }}">{{ book.author.name }}</a></p>
-      {% if book.rating %}<p>Rating: {{ book.rating }}/10</p>{% endif %}
+      {% if book.rating %}<p>{{ star_rating(book.rating) }}</p>{% endif %}
       <div class="card-actions">
         <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
           <button class="danger" type="submit" aria-label="Delete book: {{ book.title }}">Delete book</button>

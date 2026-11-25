@@ -12,10 +12,10 @@ from data_models import Author, Book, db
 @pytest.mark.parametrize(
     ("value", "saved_rating", "message"),
     [
-        ("7", 7, "Success: Book &#39;Earthsea&#39; was rated 7/10."),
-        ("0", None, "Error: The rating must be a whole number from 1 to 10."),
-        ("11", None, "Error: The rating must be a whole number from 1 to 10."),
-        ("7.5", None, "Error: The rating must be a whole number from 1 to 10."),
+        ("7", 7, "Success: Book &#39;Earthsea&#39; was rated 3.5 of 5 stars."),
+        ("0", None, "Error: Please choose a rating from 0.5 to 5 stars."),
+        ("11", None, "Error: Please choose a rating from 0.5 to 5 stars."),
+        ("7.5", None, "Error: Please choose a rating from 0.5 to 5 stars."),
     ],
 )
 def test_rate_book(client: FlaskClient, value: str, saved_rating: int | None, message: str) -> None:

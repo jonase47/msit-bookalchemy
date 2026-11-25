@@ -8,6 +8,11 @@
     <title>{% block title %}Book Alchemy{% endblock %}</title>
   </head>
   <body>
+    <svg class="visually-hidden" aria-hidden="true" focusable="false">
+      <symbol id="star" viewBox="0 0 24 24">
+        <path d="M12 2.5l2.94 5.96 6.56.95-4.75 4.63 1.12 6.54L12 17.5l-5.87 3.08 1.12-6.54L2.5 9.41l6.56-.95z"/>
+      </symbol>
+    </svg>
     {% include "nav.html" %}
     <main>
       {% include "flash_messages.html" %}

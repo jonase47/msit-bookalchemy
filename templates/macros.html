@@ -1,0 +1,8 @@
+{# Shows a stored rating (1-10) as 0.5 to 5 stars, followed by the value as text. #}
+{% macro star_rating(rating) -%}
+  <span class="stars" style="--rating: {{ rating }}" aria-hidden="true">
+    <span>{% for _ in range(5) %}<svg><use href="#star"></use></svg>{% endfor %}</span>
+    <span class="stars-full">{% for _ in range(5) %}<svg><use href="#star"></use></svg>{% endfor %}</span>
+  </span>
+  {{ "%g" % (rating / 2) }}<span class="visually-hidden"> of 5 stars</span>
+{%- endmacro %}

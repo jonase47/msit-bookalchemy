@@ -145,7 +145,7 @@ def book_detail(book_id: int) -> str:
 
 @app.route("/book/<int:book_id>/rate", methods=["POST"])
 def rate_book(book_id: int) -> Response:
-    """Save a rating from 1 to 10 for a book."""
+    """Save a rating for a book: 1 to 10, shown as 0.5 to 5 stars."""
     book = db.get_or_404(Book, book_id)
     try:
         rating = int(request.form.get("rating", ""))
@@ -154,9 +154,9 @@ def rate_book(book_id: int) -> Response:
     if 1 <= rating <= 10:
         book.rating = rating
         db.session.commit()
-        flash(f"Book '{book.title}' was rated {rating}/10.", "success")
+        flash(f"Book '{book.title}' was rated {rating / 2:g} of 5 stars.", "success")
     else:
-        flash("The rating must be a whole number from 1 to 10.", "error")
+        flash("Please choose a rating from 0.5 to 5 stars.", "error")
     return redirect(url_for("book_detail", book_id=book_id))
 
 

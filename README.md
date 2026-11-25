@@ -9,7 +9,7 @@ Codio-Projekt aus dem MSIT-Kurs „AI for Developers“, Track OOP mit Python, W
 - Startseite mit allen Büchern als Karten, mit Cover, Autor und Bewertung
 - Sortieren nach Titel oder Autor, Stichwortsuche im Titel
 - Detailseiten für Bücher und Autoren
-- Bücher mit 1 bis 10 bewerten
+- Bücher mit 0,5 bis 5 Sternen bewerten (gespeichert als ganze Zahl von 1 bis 10)
 - Buch löschen: Hat der Autor danach keine Bücher mehr, wird er mitgelöscht
 - Autor löschen (auf seiner Detailseite): Seine Bücher werden mitgelöscht
 - KI-Buchempfehlung auf Basis der Bibliothek, über eine frei wählbare Schnittstelle
@@ -54,7 +54,7 @@ Die Tests nutzen eine Datenbank im Arbeitsspeicher und rufen keine externe Schni
 | `/add_author` | GET, POST | Autor anlegen |
 | `/add_book` | GET, POST | Buch anlegen |
 | `/book/<book_id>` | GET | Detailseite eines Buchs |
-| `/book/<book_id>/rate` | POST | Buch bewerten (1–10) |
+| `/book/<book_id>/rate` | POST | Buch bewerten (1–10, angezeigt als 0,5–5 Sterne) |
 | `/book/<book_id>/delete` | POST | Buch löschen |
 | `/author/<author_id>` | GET | Detailseite eines Autors |
 | `/author/<author_id>/delete` | POST | Autor mit allen Büchern löschen |
