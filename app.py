@@ -133,6 +133,20 @@ def home() -> str:
     return render_template("home.html", books=books, sort=sort, search=search)
 
 
+@app.route("/book/<int:book_id>")
+def book_detail(book_id: int) -> str:
+    """Show the details of a single book."""
+    book = db.get_or_404(Book, book_id)
+    return render_template("book.html", book=book)
+
+
+@app.route("/author/<int:author_id>")
+def author_detail(author_id: int) -> str:
+    """Show an author with the list of their books."""
+    author = db.get_or_404(Author, author_id)
+    return render_template("author.html", author=author)
+
+
 @app.route("/book/<int:book_id>/delete", methods=["POST"])
 def delete_book(book_id: int) -> Response:
     """Delete a book and also its author if the author has no other books."""

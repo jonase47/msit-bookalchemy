@@ -22,5 +22,5 @@ def test_home_sorts_books(client: FlaskClient, sort: str, expected_order: list[s
 
     html = client.get(f"/?sort={sort}").get_data(as_text=True)
 
-    positions = [html.index(f"<h3>{title}</h3>") for title in expected_order]
+    positions = [html.index(f">{title}</a></h3>") for title in expected_order]
     assert positions == sorted(positions)

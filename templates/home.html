@@ -27,8 +27,8 @@
     <div>
       <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn | urlencode }}-M.jpg"
            alt="Cover of {{ book.title }}" width="120" height="180">
-      <h3>{{ book.title }}</h3>
-      <p>by {{ book.author.name }}</p>
+      <h3><a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a></h3>
+      <p>by <a href="{{ url_for('author_detail', author_id=book.author.id) }}">{{ book.author.name }}</a></p>
       <form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
         <button type="submit" aria-label="Delete author: {{ book.author.name }}">Delete author</button>
       </form>
