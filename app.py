@@ -131,3 +131,22 @@ def home() -> str:
     query = query.order_by(SORT_COLUMNS[sort], SORT_COLUMNS["title"])
     books = db.session.execute(query).scalars().all()
     return render_template("home.html", books=books, sort=sort, search=search)
+
+
+@app.route("/book/<int:book_id>/delete", methods=["POST"])
+def delete_book(book_id: int) -> Response:
+    """Delete a book and also its author if the author has no other books."""
+    book = db.get_or_404(Book, book_id)
+    author = book.author
+    # Check before deleting: author.books still lists the book until the commit.
+    author_has_no_other_books = author.books == [book]
+
+    db.session.delete(book)
+    message = f"Book '{book.title}' was deleted successfully."
+    if author_has_no_other_books:
+        db.session.delete(author)
+        message += f" Author '{author.name}' had no other books and was deleted too."
+    db.session.commit()
+
+    flash(message, "success")
+    return redirect(url_for("home"))
