@@ -16,6 +16,8 @@ class Author(db.Model):  # type: ignore[name-defined]
     birth_date = db.Column(db.Date, nullable=False)
     date_of_death = db.Column(db.Date)
 
+    books = db.relationship("Book", back_populates="author")
+
     def __repr__(self) -> str:
         return f"<Author id={self.id} name={self.name!r}>"
 
@@ -34,6 +36,8 @@ class Book(db.Model):  # type: ignore[name-defined]
     title = db.Column(db.String, nullable=False)
     publication_year = db.Column(db.Integer)
     author_id = db.Column(db.Integer, db.ForeignKey("authors.id"), nullable=False)
+
+    author = db.relationship("Author", back_populates="books")
 
     def __repr__(self) -> str:
         return f"<Book id={self.id} title={self.title!r}>"

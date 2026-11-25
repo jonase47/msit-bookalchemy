@@ -13,9 +13,7 @@ def create_author_with_book() -> int:
     """Store an author with one book (ISBN 111) and return the author's id."""
     with app.app_context():
         author = Author(name="Ursula K. Le Guin", birth_date=date(1929, 10, 21))
-        db.session.add(author)
-        db.session.flush()
-        db.session.add(Book(isbn="111", title="Earthsea", author_id=author.id))
+        db.session.add(Book(isbn="111", title="Earthsea", author=author))
         db.session.commit()
         return author.id
 

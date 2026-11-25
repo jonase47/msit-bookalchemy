@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Book Alchemy</title>
   </head>
   <body>
 
     {% for book in books %}
-    <div> <h3>{{ book.title }}</h3>
+    <div>
+      <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn | urlencode }}-M.jpg"
+           alt="Cover of {{ book.title }}" width="120" height="180">
+      <h3>{{ book.title }}</h3>
+      <p>by {{ book.author.name }}</p>
     </div>
+    {% else %}
+    <p>There are no books yet.</p>
     {% endfor %}
 
   </body>

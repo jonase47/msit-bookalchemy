@@ -101,7 +101,7 @@ def add_book() -> str | Response:
         if existing_book is not None:
             return reject("A book with this ISBN already exists.", "add_book")
 
-        book = Book(isbn=isbn, title=title, publication_year=publication_year, author_id=author.id)
+        book = Book(isbn=isbn, title=title, publication_year=publication_year, author=author)
         db.session.add(book)
         db.session.commit()
         flash(f"Book '{book.title}' was added successfully.", "success")
@@ -109,3 +109,10 @@ def add_book() -> str | Response:
 
     authors = db.session.execute(db.select(Author).order_by(Author.name)).scalars().all()
     return render_template("add_book.html", authors=authors)
+
+
+@app.route("/")
+def home() -> str:
+    """Show all books with their author and cover image."""
+    books = db.session.execute(db.select(Book)).scalars().all()
+    return render_template("home.html", books=books)
