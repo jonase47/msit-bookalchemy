@@ -4,7 +4,7 @@ import pytest
 from flask.testing import FlaskClient
 
 from app import app
-from data_models import Author
+from data_models import Author, db
 
 
 def test_add_author_saves_author(client: FlaskClient) -> None:
@@ -14,7 +14,7 @@ def test_add_author_saves_author(client: FlaskClient) -> None:
 
     assert "Success:" in response.get_data(as_text=True)
     with app.app_context():
-        [author] = Author.query.all()
+        [author] = db.session.execute(db.select(Author)).scalars().all()
         assert (author.name, str(author.birth_date), author.date_of_death) == (
             "Neil Gaiman", "1960-11-10", None
         )
@@ -35,4 +35,4 @@ def test_add_author_rejects_invalid_input(
 
     assert f"Error: {message}" in response.get_data(as_text=True)
     with app.app_context():
-        assert Author.query.count() == 0
+        assert db.session.execute(db.select(Author)).scalars().all() == []

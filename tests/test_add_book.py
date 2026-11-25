@@ -30,7 +30,7 @@ def test_add_book_saves_book(client: FlaskClient) -> None:
 
     assert "Success:" in response.get_data(as_text=True)
     with app.app_context():
-        book = Book.query.filter_by(isbn="222").one()
+        book = db.session.execute(db.select(Book).filter_by(isbn="222")).scalar_one()
         assert (book.title, book.publication_year, book.author_id) == (
             "The Dispossessed", 1974, author_id
         )
@@ -57,4 +57,4 @@ def test_add_book_rejects_invalid_input(
 
     assert f"Error: {message}" in response.get_data(as_text=True)
     with app.app_context():
-        assert Book.query.count() == 1
+        assert len(db.session.execute(db.select(Book)).scalars().all()) == 1
