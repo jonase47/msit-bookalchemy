@@ -5,7 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-class Author(db.Model):
+# db.Model is created at runtime, so mypy cannot resolve it as a base class.
+class Author(db.Model):  # type: ignore[name-defined]
     """An author who has written one or more books."""
 
     __tablename__ = "authors"
@@ -22,7 +23,8 @@ class Author(db.Model):
         return self.name
 
 
-class Book(db.Model):
+# db.Model is created at runtime, so mypy cannot resolve it as a base class.
+class Book(db.Model):  # type: ignore[name-defined]
     """A book in the library, written by exactly one author."""
 
     __tablename__ = "books"

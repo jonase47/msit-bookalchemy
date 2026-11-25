@@ -14,6 +14,8 @@ app.secret_key = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
+# Allow overriding settings via FLASK_* environment variables (used by the tests).
+app.config.from_prefixed_env()
 
 db.init_app(app)
 
