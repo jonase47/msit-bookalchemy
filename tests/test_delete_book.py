@@ -15,7 +15,9 @@ def test_delete_book_removes_author_without_other_books(
 ) -> None:
     with app.app_context():
         author = Author(name="Ursula K. Le Guin", birth_date=date(1929, 10, 21))
-        db.session.add_all([Book(isbn=str(i), title=f"Book {i}", author=author) for i in range(book_count)])
+        db.session.add_all(
+            [Book(isbn=str(i), title=f"Book {i}", author=author) for i in range(book_count)]
+        )
         db.session.commit()
 
     response = client.post("/book/1/delete", follow_redirects=True)

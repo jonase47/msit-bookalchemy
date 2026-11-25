@@ -101,7 +101,9 @@ def add_book() -> str | Response:
         author = find_author(request.form.get("author_id", ""))
         if author is None:
             return reject("Please choose an existing author.", "add_book")
-        existing_book = db.session.execute(db.select(Book).filter_by(isbn=isbn)).scalar_one_or_none()
+        existing_book = db.session.execute(
+            db.select(Book).filter_by(isbn=isbn)
+        ).scalar_one_or_none()
         if existing_book is not None:
             return reject("A book with this ISBN already exists.", "add_book")
 

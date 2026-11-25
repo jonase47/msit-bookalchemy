@@ -17,7 +17,10 @@ def test_home_sorts_books(client: FlaskClient, sort: str, expected_order: list[s
     with app.app_context():
         zoe = Author(name="Zoe Writer", birth_date=date(1950, 1, 1))
         adam = Author(name="Adam Writer", birth_date=date(1950, 1, 1))
-        db.session.add_all([Book(isbn="1", title="Alpha", author=zoe), Book(isbn="2", title="Beta", author=adam)])
+        db.session.add_all([
+            Book(isbn="1", title="Alpha", author=zoe),
+            Book(isbn="2", title="Beta", author=adam),
+        ])
         db.session.commit()
 
     html = client.get(f"/?sort={sort}").get_data(as_text=True)
