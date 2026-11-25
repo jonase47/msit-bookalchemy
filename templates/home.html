@@ -1,49 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Book Alchemy</title>
-  </head>
-  <body>
-  {% include "nav.html" %}
-  {% include "flash_messages.html" %}
+{% extends "base.html" %}
 
-    <form action="{{ url_for('home') }}" method="GET" role="search">
-      <label for="q">Search title:</label>
-      <input type="search" id="q" name="q" value="{{ search }}">
-      <input type="hidden" name="sort" value="{{ sort }}">
-      <button type="submit">Search</button>
+{% block title %}Book Alchemy{% endblock %}
+
+{% block content %}
+  <form action="{{ url_for('home') }}" method="GET" role="search">
+    <label for="q">Search title:</label>
+    <input type="search" id="q" name="q" value="{{ search }}">
+    <input type="hidden" name="sort" value="{{ sort }}">
+    <button type="submit">Search</button>
+  </form>
+
+  <p>
+    Sort by:
+    <a href="{{ url_for('home', sort='title', q=search or None) }}"{% if sort == 'title' %} aria-current="true"{% endif %}>Title</a> |
+    <a href="{{ url_for('home', sort='author', q=search or None) }}"{% if sort == 'author' %} aria-current="true"{% endif %}>Author</a>
+  </p>
+
+  {% for book in books %}
+  <div>
+    <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn | urlencode }}-M.jpg"
+         alt="Cover of {{ book.title }}" width="120" height="180">
+    <h3><a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a></h3>
+    <p>by <a href="{{ url_for('author_detail', author_id=book.author.id) }}">{{ book.author.name }}</a></p>
+    {% if book.rating %}<p>Rating: {{ book.rating }}/10</p>{% endif %}
+    <form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
+      <button type="submit" aria-label="Delete author: {{ book.author.name }}">Delete author</button>
     </form>
-
-    <p>
-      Sort by:
-      <a href="{{ url_for('home', sort='title', q=search or None) }}"{% if sort == 'title' %} aria-current="true"{% endif %}>Title</a> |
-      <a href="{{ url_for('home', sort='author', q=search or None) }}"{% if sort == 'author' %} aria-current="true"{% endif %}>Author</a>
-    </p>
-
-    {% for book in books %}
-    <div>
-      <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn | urlencode }}-M.jpg"
-           alt="Cover of {{ book.title }}" width="120" height="180">
-      <h3><a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a></h3>
-      <p>by <a href="{{ url_for('author_detail', author_id=book.author.id) }}">{{ book.author.name }}</a></p>
-      {% if book.rating %}<p>Rating: {{ book.rating }}/10</p>{% endif %}
-      <form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
-        <button type="submit" aria-label="Delete author: {{ book.author.name }}">Delete author</button>
-      </form>
-      <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
-        <button type="submit" aria-label="Delete book: {{ book.title }}">Delete book</button>
-      </form>
-    </div>
-    {% else %}
-    {% if search %}
-    <p role="status">No books found for "{{ search }}".</p>
-    {% else %}
-    <p>There are no books yet.</p>
-    {% endif %}
-    {% endfor %}
-
-  </body>
-</html>
+    <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
+      <button type="submit" aria-label="Delete book: {{ book.title }}">Delete book</button>
+    </form>
+  </div>
+  {% else %}
+  {% if search %}
+  <p role="status">No books found for "{{ search }}".</p>
+  {% else %}
+  <p>There are no books yet.</p>
+  {% endif %}
+  {% endfor %}
+{% endblock %}
