@@ -8,6 +8,7 @@ from flask import Flask, flash, redirect, render_template, request, url_for
 from werkzeug.wrappers import Response
 
 from data_models import db, Author, Book
+from recommender import RecommenderError, is_configured, recommend_book
 
 # Case-insensitive sort expressions for the home page, keyed by the "sort" query parameter.
 SORT_COLUMNS = {"title": db.func.lower(Book.title), "author": db.func.lower(Author.name)}
@@ -194,3 +195,19 @@ def delete_author(author_id: int) -> Response:
 
     flash(f"Author '{author.name}' and {book_count} book(s) were deleted successfully.", "success")
     return redirect(url_for("home"))
+
+
+@app.route("/recommendation", methods=["GET", "POST"])
+def recommendation() -> str:
+    """Show the recommendation page; a POST asks the configured AI service for a book tip."""
+    books = db.session.execute(db.select(Book).join(Book.author)).scalars().all()
+    configured = is_configured()
+    answer = error = None
+    if request.method == "POST" and configured and books:
+        try:
+            answer = recommend_book(books)
+        except RecommenderError as exc:
+            app.logger.warning("Recommendation failed: %r", exc.__cause__)
+            error = str(exc)
+    return render_template("recommendation.html", configured=configured, has_books=bool(books),
+                           answer=answer, error=error)
