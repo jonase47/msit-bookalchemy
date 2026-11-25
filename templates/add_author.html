@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add Author</title>
   </head>
   <body>
+
+  {% include "flash_messages.html" %}
 
   <form action="/add_author" method="POST">
   <label for="name">Author Name:</label> 
