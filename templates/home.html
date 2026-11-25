@@ -9,10 +9,17 @@
   <body>
   {% include "nav.html" %}
 
+    <form action="{{ url_for('home') }}" method="GET" role="search">
+      <label for="q">Search title:</label>
+      <input type="search" id="q" name="q" value="{{ search }}">
+      <input type="hidden" name="sort" value="{{ sort }}">
+      <button type="submit">Search</button>
+    </form>
+
     <p>
       Sort by:
-      <a href="{{ url_for('home', sort='title') }}"{% if sort == 'title' %} aria-current="true"{% endif %}>Title</a> |
-      <a href="{{ url_for('home', sort='author') }}"{% if sort == 'author' %} aria-current="true"{% endif %}>Author</a>
+      <a href="{{ url_for('home', sort='title', q=search or None) }}"{% if sort == 'title' %} aria-current="true"{% endif %}>Title</a> |
+      <a href="{{ url_for('home', sort='author', q=search or None) }}"{% if sort == 'author' %} aria-current="true"{% endif %}>Author</a>
     </p>
 
     {% for book in books %}
@@ -23,7 +30,11 @@
       <p>by {{ book.author.name }}</p>
     </div>
     {% else %}
+    {% if search %}
+    <p role="status">No books found for "{{ search }}".</p>
+    {% else %}
     <p>There are no books yet.</p>
+    {% endif %}
     {% endfor %}
 
   </body>

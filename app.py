@@ -116,10 +116,18 @@ def add_book() -> str | Response:
 
 @app.route("/")
 def home() -> str:
-    """Show all books with their author and cover image, sorted by title or author."""
+    """Show the books with their author and cover image.
+
+    Supports sorting by title or author and an optional keyword search in the title.
+    """
     sort = request.args.get("sort", "title")
     if sort not in SORT_COLUMNS:
         sort = "title"
-    query = db.select(Book).join(Book.author).order_by(SORT_COLUMNS[sort], SORT_COLUMNS["title"])
+    search = request.args.get("q", "").strip()
+
+    query = db.select(Book).join(Book.author)
+    if search:
+        query = query.where(Book.title.like(f"%{search}%"))
+    query = query.order_by(SORT_COLUMNS[sort], SORT_COLUMNS["title"])
     books = db.session.execute(query).scalars().all()
-    return render_template("home.html", books=books, sort=sort)
+    return render_template("home.html", books=books, sort=sort, search=search)
