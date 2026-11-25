@@ -140,6 +140,23 @@ def book_detail(book_id: int) -> str:
     return render_template("book.html", book=book)
 
 
+@app.route("/book/<int:book_id>/rate", methods=["POST"])
+def rate_book(book_id: int) -> Response:
+    """Save a rating from 1 to 10 for a book."""
+    book = db.get_or_404(Book, book_id)
+    try:
+        rating = int(request.form.get("rating", ""))
+    except ValueError:
+        rating = 0
+    if 1 <= rating <= 10:
+        book.rating = rating
+        db.session.commit()
+        flash(f"Book '{book.title}' was rated {rating}/10.", "success")
+    else:
+        flash("The rating must be a whole number from 1 to 10.", "error")
+    return redirect(url_for("book_detail", book_id=book_id))
+
+
 @app.route("/author/<int:author_id>")
 def author_detail(author_id: int) -> str:
     """Show an author with the list of their books."""

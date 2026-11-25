@@ -37,6 +37,7 @@ class Book(db.Model):  # type: ignore[name-defined]
     title = db.Column(db.String, nullable=False)
     publication_year = db.Column(db.Integer)
     author_id = db.Column(db.Integer, db.ForeignKey("authors.id"), nullable=False)
+    rating = db.Column(db.Integer)  # Optional, 1 to 10.
 
     author = db.relationship("Author", back_populates="books")
 
