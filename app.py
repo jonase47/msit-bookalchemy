@@ -32,6 +32,26 @@ def parse_date(value: str) -> date | None:
     return date.fromisoformat(value)
 
 
+def parse_year(value: str) -> int | None:
+    """Convert an optional year form value into an int, or None if it is empty.
+
+    Raises ValueError if the value is not a whole number.
+    """
+    value = value.strip()
+    if not value:
+        return None
+    return int(value)
+
+
+def find_author(value: str) -> Author | None:
+    """Return the author whose id is given as form value, or None if there is none."""
+    try:
+        author_id = int(value)
+    except ValueError:
+        return None
+    return db.session.get(Author, author_id)
+
+
 def reject(message: str, endpoint: str) -> Response:
     """Flash an error message and redirect back to the given endpoint."""
     flash(message, "error")
@@ -58,3 +78,31 @@ def add_author() -> str | Response:
         return redirect(url_for("add_author"))
 
     return render_template("add_author.html")
+
+
+@app.route("/add_book", methods=["GET", "POST"])
+def add_book() -> str | Response:
+    """Show the book form (GET) or save a new book (POST)."""
+    if request.method == "POST":
+        title = request.form.get("title", "").strip()
+        isbn = request.form.get("isbn", "").strip()
+        if not title or not isbn:
+            return reject("Title and ISBN are required.", "add_book")
+        try:
+            publication_year = parse_year(request.form.get("publication_year", ""))
+        except ValueError:
+            return reject("The publication year must be a whole number.", "add_book")
+        author = find_author(request.form.get("author_id", ""))
+        if author is None:
+            return reject("Please choose an existing author.", "add_book")
+        if Book.query.filter_by(isbn=isbn).first() is not None:
+            return reject("A book with this ISBN already exists.", "add_book")
+
+        book = Book(isbn=isbn, title=title, publication_year=publication_year, author_id=author.id)
+        db.session.add(book)
+        db.session.commit()
+        flash(f"Book '{book.title}' was added successfully.", "success")
+        return redirect(url_for("add_book"))
+
+    authors = Author.query.order_by(Author.name).all()
+    return render_template("add_book.html", authors=authors)
