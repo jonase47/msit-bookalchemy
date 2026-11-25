@@ -1,0 +1,126 @@
+/* Book Alchemy – shared stylesheet.
+   Colour-blind friendly: blue for actions and success, orange for deleting and errors.
+   Status is never shown by colour alone; messages always start with a text label. */
+
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --surface: #f4f6f8;
+  --text: #1c1f23;
+  --muted: #555d66;
+  --border: #c9cfd6;
+  --accent: #0b5cad;
+  --accent-text: #ffffff;
+  --accent-bg: #e6f0fb;
+  --warning: #b35900;
+  --warning-bg: #fdf0e3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15181c;
+    --surface: #1f2329;
+    --text: #e8eaed;
+    --muted: #a9b0b8;
+    --border: #3a4049;
+    --accent: #6cb0f5;
+    --accent-text: #0d1117;
+    --accent-bg: #16283d;
+    --warning: #f5a453;
+    --warning-bg: #3a2614;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+nav, main { max-width: 60rem; margin: 0 auto; padding: 1rem; }
+nav { border-bottom: 1px solid var(--border); }
+nav ul { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 0; padding: 0; list-style: none; }
+nav a { font-weight: 600; }
+
+a { color: var(--accent); }
+a:hover { text-decoration-thickness: 3px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+h1 { margin: 0.5rem 0 1rem; font-size: 1.75rem; }
+/* Covers keep a 2:3 frame, also for the 1x1 placeholder Open Library sends for unknown ISBNs. */
+img { max-width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: contain; background: var(--border); }
+
+/* Forms */
+label { display: block; margin: 1rem 0 0.25rem; font-weight: 600; }
+input, select, button { font: inherit; }
+input:not([type="hidden"], [type="submit"]), select {
+  width: 100%;
+  max-width: 28rem;
+  min-height: 44px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--muted);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+}
+button, input[type="submit"] {
+  min-height: 44px;
+  padding: 0.4rem 1rem;
+  border: 2px solid var(--accent);
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+  cursor: pointer;
+}
+button.danger { border-color: var(--warning); background: transparent; color: var(--warning); }
+button.danger:hover { background: var(--warning-bg); }
+.stacked button, .stacked input[type="submit"] { display: block; margin: 1.25rem 0; }
+
+.search { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.search label { flex-basis: 100%; margin: 0; }
+.search input[type="search"] { flex: 1 1 12rem; }
+.sort a[aria-current] { font-weight: 700; text-decoration-thickness: 3px; }
+
+/* Success, error and note messages */
+.flash {
+  max-width: 40rem;
+  padding: 0.75rem 1rem;
+  border-left: 6px solid var(--muted);
+  border-radius: 4px;
+  background: var(--surface);
+}
+.flash-success { border-color: var(--accent); background: var(--accent-bg); }
+.flash-error { border-color: var(--warning); background: var(--warning-bg); }
+
+/* Home page: books as cards in a grid */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.card img { align-self: center; }
+.card h3 { margin: 0.75rem 0 0.25rem; font-size: 1.05rem; overflow-wrap: anywhere; }
+.card p { margin: 0 0 0.25rem; color: var(--muted); }.card-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; padding-top: 0.75rem; }
+.card-actions button { padding: 0.25rem 0.6rem; font-size: 0.9rem; }
+
+/* Book detail page */
+.book-detail { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; }
+dl { display: grid; grid-template-columns: auto 1fr; gap: 0.25rem 1rem; margin: 0; }
+dt { font-weight: 600; }
+dd { margin: 0; overflow-wrap: anywhere; }
+
+.recommendation { max-width: 40rem; white-space: pre-line; }

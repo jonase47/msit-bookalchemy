@@ -5,10 +5,10 @@
 {% block content %}
   <h1>Book recommendation</h1>
   {% if not configured %}
-  <p role="status">Note: The AI recommendation is not set up on this server yet.
+  <p class="flash flash-note" role="status">Note: The AI recommendation is not set up on this server yet.
     Set RECOMMENDER_API_URL and RECOMMENDER_MODEL to enable it.</p>
   {% elif not has_books %}
-  <p role="status">Note: Add some books first, then ask for a recommendation.</p>
+  <p class="flash flash-note" role="status">Note: Add some books first, then ask for a recommendation.</p>
   {% else %}
   <p>Get a book tip based on the titles, authors and ratings in your library.</p>
   <form action="{{ url_for('recommendation') }}" method="POST">
@@ -17,10 +17,10 @@
   {% endif %}
 
   {% if error %}
-  <p role="status">Error: {{ error }}</p>
+  <p class="flash flash-error" role="status">Error: {{ error }}</p>
   {% endif %}
   {% if answer %}
   <h2>Our recommendation</h2>
-  <p style="white-space: pre-line">{{ answer }}</p>
+  <p class="recommendation">{{ answer }}</p>
   {% endif %}
 {% endblock %}
