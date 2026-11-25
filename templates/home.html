@@ -29,6 +29,9 @@
            alt="Cover of {{ book.title }}" width="120" height="180">
       <h3>{{ book.title }}</h3>
       <p>by {{ book.author.name }}</p>
+      <form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
+        <button type="submit" aria-label="Delete author: {{ book.author.name }}">Delete author</button>
+      </form>
       <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
         <button type="submit" aria-label="Delete book: {{ book.title }}">Delete book</button>
       </form>

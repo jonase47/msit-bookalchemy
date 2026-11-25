@@ -16,7 +16,8 @@ class Author(db.Model):  # type: ignore[name-defined]
     birth_date = db.Column(db.Date, nullable=False)
     date_of_death = db.Column(db.Date)
 
-    books = db.relationship("Book", back_populates="author")
+    # Deleting an author also deletes their books (ORM-level cascade, no schema change).
+    books = db.relationship("Book", back_populates="author", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return f"<Author id={self.id} name={self.name!r}>"

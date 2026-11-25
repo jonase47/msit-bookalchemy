@@ -150,3 +150,16 @@ def delete_book(book_id: int) -> Response:
 
     flash(message, "success")
     return redirect(url_for("home"))
+
+
+@app.route("/author/<int:author_id>/delete", methods=["POST"])
+def delete_author(author_id: int) -> Response:
+    """Delete an author; the relationship cascade deletes all of their books."""
+    author = db.get_or_404(Author, author_id)
+    book_count = len(author.books)
+
+    db.session.delete(author)
+    db.session.commit()
+
+    flash(f"Author '{author.name}' and {book_count} book(s) were deleted successfully.", "success")
+    return redirect(url_for("home"))
