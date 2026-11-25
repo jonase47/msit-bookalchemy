@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
+
+# Lokales Briefing für die KI-Session
+CLAUDE.md
+.claude/
+
+# Hinweis: data/library.sqlite ist bewusst NICHT ignoriert.
+# Ob die Datenbank mit ins Repo kommt, wird in Schritt 4 entschieden
+# (Codio zieht den Stand von GitHub, die Abgabe soll 5-10 Autoren und Bücher zeigen).
